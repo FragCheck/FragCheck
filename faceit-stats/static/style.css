@@ -216,3 +216,63 @@ tbody tr td:last-child {
     text-align: center;
     color: #ff4c12;
 }
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1000;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+.popup-window {
+    width: 420px;
+    background: #151515;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    color: white;
+    box-shadow: 0 0 30px rgba(255, 76, 18, 0.35);
+}
+
+.popup-window h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.popup-input {
+    width: 100%;
+    padding: 14px;
+    background: #0d0d0d;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.popup-input:focus {
+    outline: none;
+    border-color: #ff4c12;
+}
+
+.popup-enter-btn {
+    width: 100%;
+    padding: 14px;
+    background: #ff4c12;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.popup-enter-btn:hover {
+    background: #ff642f;
+}
