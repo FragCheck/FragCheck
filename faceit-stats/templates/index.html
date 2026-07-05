@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Statistics Dashboard
-    </title>
-    <link rel="stylesheet" href="style.css" />
+    <title>User Statistics Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
@@ -23,14 +22,14 @@
         <header class="topbar">
             <div>
                 <h1>Your Data</h1>
-                <p>User Data</Data></p>
+                <p>User Data</p>
             </div>
 
             <div class="actions">
-                <button class="text-btn">New Statistics</button>
-                <button class="circle-btn">+</button>
-                <span>UserName</span>
-                <div class="avatar">UN</div>
+                <button class="text-btn" id="openPopupTextBtn">New Statistics</button>
+                <button id="openPopupBtn" class="circle-btn">+</button>
+                <span id="topUsername">UserName</span>
+                <div id="avatar" class="avatar">UN</div>
             </div>
         </header>
 
@@ -38,36 +37,105 @@
             <table>
                 <thead>
                     <tr>
-                        <th>UserName ↑</th>
-                        <th>Default</th>
-                        <th>Default</th>
-                        <th>Default</th>
-                        <th>Default</th>
-                        <th>Default</th>
-                        <th>Default</th>
-                        <th>Default</th>
-                        <th>Default</th>
+                        <th>UserName</th>
+                        <th>Country</th>
+                        <th>ELO</th>
+                        <th>Skill Level</th>
+                        <th>Region</th>
                         <th></th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
-                        <td>UserName</td>
-                        <td>Default</td>
-                        <td>Default</td>
-                        <td>Default</td>
-                        <td>Default</td>
-                        <td>Default</td>
-                        <td>Default</td>
-                        <td>Default</td>
-                        <td>Default</td>
+                        <td id="usernameCell">UserName</td>
+                        <td id="countryCell">Default</td>
+                        <td id="eloCell">Default</td>
+                        <td id="skillLevelCell">Default</td>
+                        <td id="regionCell">Default</td>
                         <td class="menu">⋮</td>
                     </tr>
                 </tbody>
             </table>
         </section>
     </main>
+
+    <div id="popupOverlay" class="popup-overlay">
+        <div class="popup-window">
+            <h2>Enter User Name</h2>
+
+            <input 
+                id="usernameInput"
+                type="text" 
+                placeholder="Enter User Name" 
+                class="popup-input"
+            />
+
+            <button id="enterPopupBtn" class="popup-enter-btn">
+                Enter
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const popupOverlay = document.getElementById("popupOverlay");
+        const openPopupBtn = document.getElementById("openPopupBtn");
+        const openPopupTextBtn = document.getElementById("openPopupTextBtn");
+        const enterPopupBtn = document.getElementById("enterPopupBtn");
+        const usernameInput = document.getElementById("usernameInput");
+
+        const usernameCell = document.getElementById("usernameCell");
+        const countryCell = document.getElementById("countryCell");
+        const eloCell = document.getElementById("eloCell");
+        const skillLevelCell = document.getElementById("skillLevelCell");
+        const regionCell = document.getElementById("regionCell");
+
+        const topUsername = document.getElementById("topUsername");
+        const avatar = document.getElementById("avatar");
+
+        openPopupBtn.addEventListener("click", OpenPopup);
+        openPopupTextBtn.addEventListener("click", OpenPopup);
+        enterPopupBtn.addEventListener("click", SearchPlayer);
+
+        function OpenPopup() {
+            popupOverlay.classList.add("active");
+        }
+
+        function ClosePopup() {
+            popupOverlay.classList.remove("active");
+        }
+
+        async function SearchPlayer() {
+            const username = usernameInput.value;
+
+            const response = await fetch("/search-player", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username
+                })
+            });
+
+            const player = await response.json();
+
+            console.log(player);
+
+            usernameCell.textContent = player.nickname ?? "N/A";
+            countryCell.textContent = player.country ?? "N/A";
+            eloCell.textContent = player.games?.cs2?.faceit_elo ?? "N/A";
+            skillLevelCell.textContent = player.games?.cs2?.skill_level ?? "N/A";
+            regionCell.textContent = player.games?.cs2?.region ?? "N/A";
+
+            topUsername.textContent = player.nickname ?? "UserName";
+            avatar.textContent = player.nickname
+                ? player.nickname.substring(0, 2).toUpperCase()
+                : "UN";
+
+            ClosePopup();
+        }
+    </script>
 
 </body>
 </html>
