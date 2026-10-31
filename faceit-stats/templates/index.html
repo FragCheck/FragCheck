@@ -1,141 +1,200 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Statistics Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FragCheck Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
-
-    <aside class="sidebar">
-        <div class="logo">S</div>
-
-        <nav>
-            <a class="active">👥 Users</a>
-            <a>📈 Statistics</a>
-            <a>▦ About</a>
-        </nav>
-    </aside>
-
-    <main class="content">
-        <header class="topbar">
-            <div>
-                <h1>Your Data</h1>
-                <p>User Data</p>
+    <div class="app">
+        <aside>
+            <div class="brand">
+                FRAG<span>CHECK</span>
             </div>
 
-            <div class="actions">
-                <button class="text-btn" id="openPopupTextBtn">New Statistics</button>
-                <button id="openPopupBtn" class="circle-btn">+</button>
-                <span id="topUsername">UserName</span>
-                <div id="avatar" class="avatar">UN</div>
+            <div class="nav">Player Dashboard</div>
+        </aside>
+
+        <main>
+            <header class="header">
+                <div>
+                    <h1>Player Dashboard</h1>
+                    <div class="muted">FACEIT CS2 statistics</div>
+                </div>
+
+                <form class="search" id="searchForm">
+                    <input
+                        id="username"
+                        placeholder="FACEIT username"
+                        aria-label="FACEIT username"
+                        required
+                    >
+                    <button id="searchButton" type="submit">
+                        Search Player
+                    </button>
+                </form>
+            </header>
+
+            <div id="status" class="status" role="status"></div>
+
+            <!-- Player Profile -->
+            <section class="profile panel">
+                <img id="avatar" alt="Player avatar" hidden>
+
+                <div>
+                    <h2 id="nickname">Search for a player</h2>
+
+                    <div class="muted" id="countryRegion">
+                        Enter a FACEIT username above.
+                    </div>
+
+                    <span class="tag" id="level">FACEIT Level —</span>
+                    <span class="elo" id="elo">— ELO</span>
+                </div>
+            </section>
+
+            <!-- Dashboard Tabs -->
+            <div class="tabs" role="tablist" aria-label="Dashboard sections">
+                <button
+                    class="tab"
+                    id="overviewTab"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="overview"
+                    type="button"
+                >
+                    Overview
+                </button>
+
+                <button
+                    class="tab"
+                    id="mapsTab"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="maps"
+                    type="button"
+                >
+                    Maps
+                </button>
             </div>
-        </header>
 
-        <section class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>UserName</th>
-                        <th>Country</th>
-                        <th>ELO</th>
-                        <th>Skill Level</th>
-                        <th>Region</th>
-                        <th></th>
-                    </tr>
-                </thead>
+            <!-- Overview Tab -->
+            <section
+                id="overview"
+                role="tabpanel"
+                aria-labelledby="overviewTab"
+            >
+                <h2>Lifetime performance</h2>
 
-                <tbody>
-                    <tr>
-                        <td id="usernameCell">UserName</td>
-                        <td id="countryCell">Default</td>
-                        <td id="eloCell">Default</td>
-                        <td id="skillLevelCell">Default</td>
-                        <td id="regionCell">Default</td>
-                        <td class="menu">⋮</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
+                <div class="cards">
+                    <article class="stat panel">
+                        <div class="label">Average K/D</div>
+                        <div class="value" id="kd">—</div>
+                        <div class="hint">Kills / deaths</div>
+                    </article>
 
-    <div id="popupOverlay" class="popup-overlay">
-        <div class="popup-window">
-            <h2>Enter User Name</h2>
+                    <article class="stat panel">
+                        <div class="label">Win rate</div>
+                        <div class="value" id="winrate">—</div>
+                        <div class="hint" id="winHint">Wins / matches</div>
+                    </article>
 
-            <input 
-                id="usernameInput"
-                type="text" 
-                placeholder="Enter User Name" 
-                class="popup-input"
-            />
+                    <article class="stat panel">
+                        <div class="label">Average headshots</div>
+                        <div class="value" id="headshots">—</div>
+                        <div class="hint">Headshot percentage</div>
+                    </article>
 
-            <button id="enterPopupBtn" class="popup-enter-btn">
-                Enter
-            </button>
-        </div>
+                    <article class="stat panel">
+                        <div class="label">Matches</div>
+                        <div class="value" id="matches">—</div>
+                        <div class="hint">CS2 matches</div>
+                    </article>
+                </div>
+
+                <div class="details">
+                    <!-- Account Details -->
+                    <div class="panel">
+                        <h3>Account</h3>
+
+                        <div class="detail">
+                            <span class="muted">Region</span>
+                            <b id="region">—</b>
+                        </div>
+
+                        <div class="detail">
+                            <span class="muted">Skill level</span>
+                            <b id="skill">—</b>
+                        </div>
+
+                        <div class="detail">
+                            <span class="muted">Country</span>
+                            <b id="country">—</b>
+                        </div>
+                    </div>
+
+                    <!-- Match Record -->
+                    <div class="panel">
+                        <h3>Match record</h3>
+
+                        <div class="detail">
+                            <span class="muted">Wins</span>
+                            <b id="wins">—</b>
+                        </div>
+
+                        <div class="detail">
+                            <span class="muted">Current win streak</span>
+                            <b id="streak">—</b>
+                        </div>
+
+                        <div class="detail">
+                            <span class="muted">Longest win streak</span>
+                            <b id="longest">—</b>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Maps Tab -->
+            <section
+                id="maps"
+                role="tabpanel"
+                aria-labelledby="mapsTab"
+                hidden
+            >
+                <h2>Map performance</h2>
+
+                <div class="panel tablewrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Map</th>
+                                <th>Matches</th>
+                                <th>Average K/D</th>
+                                <th>Win rate</th>
+                                <th>Average kills</th>
+                                <th>Average headshots</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="mapRows">
+                            <tr>
+                                <td colspan="6">
+                                    Search for a player to view map statistics.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <script>
-        const popupOverlay = document.getElementById("popupOverlay");
-        const openPopupBtn = document.getElementById("openPopupBtn");
-        const openPopupTextBtn = document.getElementById("openPopupTextBtn");
-        const enterPopupBtn = document.getElementById("enterPopupBtn");
-        const usernameInput = document.getElementById("usernameInput");
-
-        const usernameCell = document.getElementById("usernameCell");
-        const countryCell = document.getElementById("countryCell");
-        const eloCell = document.getElementById("eloCell");
-        const skillLevelCell = document.getElementById("skillLevelCell");
-        const regionCell = document.getElementById("regionCell");
-
-        const topUsername = document.getElementById("topUsername");
-        const avatar = document.getElementById("avatar");
-
-        openPopupBtn.addEventListener("click", OpenPopup);
-        openPopupTextBtn.addEventListener("click", OpenPopup);
-        enterPopupBtn.addEventListener("click", SearchPlayer);
-
-        function OpenPopup() {
-            popupOverlay.classList.add("active");
-        }
-
-        function ClosePopup() {
-            popupOverlay.classList.remove("active");
-        }
-
-        async function SearchPlayer() {
-            const username = usernameInput.value;
-
-            const response = await fetch("/search-player", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username
-                })
-            });
-
-            const player = await response.json();
-
-            console.log(player);
-
-            usernameCell.textContent = player.nickname ?? "N/A";
-            countryCell.textContent = player.country ?? "N/A";
-            eloCell.textContent = player.games?.cs2?.faceit_elo ?? "N/A";
-            skillLevelCell.textContent = player.games?.cs2?.skill_level ?? "N/A";
-            regionCell.textContent = player.games?.cs2?.region ?? "N/A";
-
-            topUsername.textContent = player.nickname ?? "UserName";
-            avatar.textContent = player.nickname
-                ? player.nickname.substring(0, 2).toUpperCase()
-                : "UN";
-
-            ClosePopup();
-        }
-    </script>
-
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>
