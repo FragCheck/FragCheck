@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
-from api import get_player
+import api
+print("FRAGCHECK MAIN.PY LOADED", flush=True)
 
 app = Flask(__name__)
 
@@ -10,10 +11,24 @@ def home():
 
 @app.route("/search-player", methods=["POST"])
 def search_player():
+  print("SEARCH REQUEST RECEIVED", flush=True)
   data = request.get_json()
   username = data.get("username")
-  player_data = get_player(username)
-  return jsonify(player_data)
+  
+  playerdata = api.get_player(username)
+  if "error" in playerdata:
+    return jsonify(playerdata), playerdata.get("status_code", 502)
+
+  playerid = playerdata.get("player_id")
+  if not playerid:
+    return jsonify({"error": "Player not found or FACEIT API request failed"}), 404
+
+  playerstats = api.get_player_stats(playerid)
+
+  playerinfo = {"profile": playerdata , "stats": playerstats}
+
+
+  return jsonify(playerinfo)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

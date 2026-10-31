@@ -1,8 +1,12 @@
 import requests
 import json
 from urllib.parse import quote
+import os
+from dotenv import load_dotenv
 
-API_KEY = "f945e411-9234-4eba-b93d-39d4de1656af"
+load_dotenv()
+
+API_KEY = os.getenv("FACEIT_API_KEY")
 
 headers = {
     "Authorization" : f"Bearer {API_KEY}"
@@ -29,7 +33,7 @@ def get_player_stats(player_id):
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-      return response
+      return response.json()
     
     return {
         "error": "Stats not found or API request failure",
