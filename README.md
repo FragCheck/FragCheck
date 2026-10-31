@@ -1,4 +1,4 @@
-# Stat Bang
+# FragCheck
 CS2 Player Statistics & Performance Analytics.
 
 Collaborative project between JoeRenDev & Kaan-Dilmen.
