@@ -13,6 +13,9 @@ Collaborative project between JoeRenDev & Kaan-Dilmen.
 
 ### Planned Features
 - Player profile/performance comparison
+- Login functionality
+- Player data exports
+- Security hardening
 - AI-powered performance analysis
 - AI-powered playstyle improvement suggestions
 - AI-powered realtime match analysis
