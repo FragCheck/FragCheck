@@ -6,19 +6,23 @@ Collaborative project between JoeRenDev & Kaan-Dilmen.
 ## Current and Planned Features
 
 ### Current Features
-- Responsive frontend
-- Search users on FACEIT database
-- View player statistics (K/D, win rate, average kills, etc)
-- Specific map performance statistics
+- Responsive frontend.
+- Search users on FACEIT database.
+- View player statistics (K/D, win rate, average kills, etc).
+- Specific map performance statistics.
 
 ### Planned Features
-- Player profile/performance comparison
-- Login functionality
-- Player data exports
-- Security hardening
-- AI-powered performance analysis
-- AI-powered playstyle improvement suggestions
-- AI-powered realtime match analysis
+- Player profile/performance comparison.
+- Login functionality.
+- Player data exports.
+- Security hardening.
+- AI-powered performance analysis.
+- AI-powered playstyle improvement suggestions.
+- AI-powered realtime match analysis.
+
+## Development Disclaimer
+- API Key not included within this repository.
+- For testing / demonstration before full deployment, an API key can be created through the 'FACEIT for Developers' portal.
 
 ## Third-Party Services & Disclaimer
 
