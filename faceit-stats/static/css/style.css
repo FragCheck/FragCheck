@@ -1,32 +1,81 @@
 
 /* ========================================
-   Theme Variables
+   FragCheck — Design System
 ======================================== */
 
 :root {
     color-scheme: dark;
+
     --bg: #0d1119;
-    --panel: #171e2a;
-    --panel-hover: #1c2635;
-    --border: #2c3748;
-    --muted: #9ca9bb;
+    --sidebar: #101620;
+    --surface: #151d29;
+    --surface-raised: #1b2533;
+    --surface-hover: #222e3d;
+
+    --text: #f2f5fa;
+    --text-secondary: #b5c0cf;
+    --muted: #94a3b8;
+
     --accent: #ff704e;
     --accent-hover: #ff886b;
+    --accent-soft: rgba(255, 112, 78, 0.1);
+    --accent-ring: rgba(255, 112, 78, 0.25);
+
+    --border: #2a3545;
+    --border-subtle: rgba(148, 163, 184, 0.12);
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+
+    --transition-fast: 150ms ease;
+    --transition-normal: 220ms ease;
+
+    /* Comparison table */
+    --comparison-label-bg: #202938;
+    --comparison-label-hover: #293548;
 }
 
 /* ========================================
    Global Styles
 ======================================== */
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+
     background: var(--bg);
-    color: #f2f5fa;
-    font: 15px/1.5 'Segoe UI', Arial, sans-serif;
+    color: var(--text);
+
+    font-family:
+        "Segoe UI",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
+    line-height: 1.6;
+
+    -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -35,40 +84,86 @@ input {
 }
 
 button {
-    transition: background 0.2s ease, border-color 0.2s ease,
-        opacity 0.2s ease;
+    cursor: pointer;
+
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast),
+        opacity var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+::selection {
+    background: var(--accent);
+    color: #151515;
+}
+
+[hidden] {
+    display: none !important;
 }
 
 /* ========================================
-   Main Layout
+   Application Layout
 ======================================== */
 
 .app {
     display: grid;
-    grid-template-columns: 210px 1fr;
+    grid-template-columns: 220px minmax(0, 1fr);
     min-height: 100vh;
 }
 
 aside {
-    padding: 28px 22px;
-    background: #121824;
-    border-right: 1px solid var(--border);
+    padding: var(--space-6) var(--space-5);
+
+    background: var(--sidebar);
+    border-right: 1px solid var(--border-subtle);
 }
 
 main {
-    padding: 35px 42px;
-    max-width: 1300px;
     width: 100%;
-    margin: auto;
+    max-width: 1400px;
+    min-width: 0;
+
+    margin: 0 auto;
+    padding: var(--space-7);
+
+    animation: pageAppear 350ms ease both;
+}
+
+@keyframes pageAppear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ========================================
-   Sidebar
+   Sidebar and Branding
 ======================================== */
 
 .brand {
     font-size: 24px;
     font-weight: 800;
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .brand span {
@@ -76,11 +171,50 @@ main {
 }
 
 .nav {
-    margin-top: 38px;
-    color: #fff;
-    background: #292634;
-    border-radius: 9px;
-    padding: 12px;
+    margin-top: var(--space-7);
+    padding: var(--space-3) var(--space-4);
+
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ========================================
+   Typography
+======================================== */
+
+h1,
+h2,
+h3 {
+    color: var(--text);
+    line-height: 1.3;
+    letter-spacing: -0.4px;
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(25px, 2.5vw, 32px);
+    font-weight: 750;
+}
+
+h2 {
+    margin: 0 0 var(--space-5);
+    font-size: 21px;
+    font-weight: 700;
+}
+
+h3 {
+    margin: 0 0 var(--space-4);
+    font-size: 16px;
+    font-weight: 650;
+}
+
+.muted {
+    color: var(--muted);
 }
 
 /* ========================================
@@ -89,69 +223,115 @@ main {
 
 .header {
     display: flex;
-    justify-content: space-between;
-    gap: 18px;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
-    margin-bottom: 28px;
+
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
 }
 
-h1 {
-    margin: 0;
-    font-size: 29px;
-}
-
-h2 {
-    font-size: 20px;
-}
-
-.muted {
-    color: var(--muted);
+.header .muted {
+    margin-top: var(--space-1);
+    font-size: 14px;
 }
 
 /* ========================================
-   Player Search
+   Search and Form Controls
 ======================================== */
 
-.search {
+.search,
+#comparisonForm,
+.comparison-actions {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.search input,
+#comparisonUsername {
+    min-width: 0;
+    height: 46px;
+    padding: 0 var(--space-4);
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+
+    color: var(--text);
+
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background-color var(--transition-fast);
 }
 
 .search input {
-    min-width: 220px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 12px;
-    color: white;
-    font: inherit;
+    width: 240px;
+}
+
+.search input::placeholder,
+#comparisonUsername::placeholder {
+    color: var(--muted);
+    opacity: 0.8;
+}
+
+.search input:hover,
+#comparisonUsername:hover {
+    border-color: #465468;
 }
 
 .search input:focus,
-.comparison-search input:focus {
+#comparisonUsername:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(255, 112, 78, 0.12);
+    box-shadow: 0 0 0 3px var(--accent-ring);
 }
 
-.search button {
+.search button,
+#comparisonButton {
+    min-height: 46px;
+    padding: 0 var(--space-5);
+
     background: var(--accent);
-    color: #1b1614;
-    border: 0;
-    border-radius: 9px;
-    padding: 12px 18px;
-    font-weight: bold;
-    cursor: pointer;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-md);
+
+    color: #1c1614;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
-.search button:hover {
+.search button:not(:disabled):hover,
+#comparisonButton:not(:disabled):hover {
     background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-1px);
 }
 
-.search button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
+.search button:not(:disabled):active,
+#comparisonButton:not(:disabled):active {
+    transform: translateY(0);
+}
+
+#removeComparison {
+    min-height: 46px;
+    padding: 0 var(--space-4);
+
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#removeComparison:not(:disabled):hover {
+    background: var(--surface-raised);
+    border-color: var(--muted);
+    color: var(--text);
 }
 
 /* ========================================
@@ -159,9 +339,9 @@ h2 {
 ======================================== */
 
 .panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 15px;
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
 }
 
 /* ========================================
@@ -171,143 +351,134 @@ h2 {
 .profile {
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 23px;
-    margin-bottom: 25px;
+    gap: var(--space-5);
+
+    min-height: 150px;
+    margin-bottom: var(--space-5);
+    padding: var(--space-6);
 }
 
 .profile img {
-    width: 78px;
-    height: 78px;
-    border-radius: 14px;
+    width: 88px;
+    height: 88px;
+    flex-shrink: 0;
+
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+
     object-fit: cover;
 }
 
+.profile > div {
+    min-width: 0;
+}
+
 .profile h2 {
-    margin: 0;
-    font-size: 25px;
+    margin: 0 0 var(--space-1);
+
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 750;
+
+    overflow-wrap: anywhere;
+}
+
+.profile .muted {
+    font-size: 13px;
 }
 
 .tag {
-    display: inline-block;
-    margin-top: 12px;
-    background: #362d34;
-    color: #ffbca9;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+
+    margin-top: var(--space-3);
+    padding: 5px 11px;
+
+    background: var(--accent-soft);
+    border: 1px solid rgba(255, 112, 78, 0.18);
+    border-radius: var(--radius-sm);
+
+    color: #ffad98;
     font-size: 12px;
+    font-weight: 700;
 }
 
 .elo {
-    margin-left: 14px;
-    font-weight: bold;
+    display: inline-block;
+
+    margin-left: var(--space-3);
+
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ========================================
-   Player Comparison Search
+   Comparison Search
 ======================================== */
 
 #comparisonSearch {
-    padding: 22px 24px;
-    margin-bottom: 25px;
+    margin-bottom: var(--space-6);
+    padding: var(--space-5) var(--space-6);
 }
 
 #comparisonSearch h3 {
-    margin: 0 0 16px;
-    font-size: 16px;
+    margin-bottom: var(--space-4);
 }
 
 #comparisonForm {
-    display: flex;
-    align-items: center;
-    gap: 12px;
     flex-wrap: wrap;
 }
 
 #comparisonUsername {
-    flex: 1;
-    min-width: 220px;
-    background: #101722;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 11px 14px;
-    color: white;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-#comparisonUsername::placeholder {
-    color: #778499;
-}
-
-#comparisonUsername:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(255, 112, 78, 0.12);
+    flex: 1 1 220px;
 }
 
 .comparison-actions {
-    display: flex;
-    gap: 9px;
-    align-items: center;
     flex-wrap: wrap;
 }
 
-#comparisonButton,
-#removeComparison {
-    padding: 11px 17px;
-    border-radius: 9px;
-    font-weight: 600;
-    cursor: pointer;
-}
+/* ========================================
+   Status Messages
+======================================== */
 
-#comparisonButton {
-    background: var(--accent);
-    color: #1b1614;
-    border: 1px solid var(--accent);
-}
-
-#comparisonButton:hover {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
-}
-
-#removeComparison {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-}
-
-#removeComparison:hover {
-    background: #29232b;
-    color: #ff9c87;
-    border-color: #70443f;
-}
-
-#comparisonButton:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-#comparisonStatus {
-    color: #ffbca9;
+#comparisonStatus,
+.status {
+    color: #ffad98;
     font-size: 13px;
-    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.status {
+    min-height: 0;
+}
+
+.status:not(:empty) {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-3) var(--space-4);
+
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+}
+
+#comparisonStatus:not(:empty) {
+    margin-top: var(--space-3);
 }
 
 /* ========================================
-   Player Comparison Display
+   Comparison Display
 ======================================== */
 
 #comparisonView {
-    margin-bottom: 28px;
-    animation: comparisonAppear 0.25s ease;
+    margin-bottom: var(--space-6);
+    animation: comparisonAppear 250ms ease both;
 }
 
 @keyframes comparisonAppear {
     from {
         opacity: 0;
-        transform: translateY(7px);
+        transform: translateY(6px);
     }
 
     to {
@@ -320,88 +491,12 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+
+    margin-bottom: var(--space-4);
 }
 
 .comparison-header h2 {
     margin: 0;
-    font-size: 21px;
-    font-weight: 700;
-}
-
-/* ========================================
-   Comparison Table
-======================================== */
-
-.comparison-table {
-    width: 100%;
-    min-width: 480px;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-.comparison-table th,
-.comparison-table td {
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--border);
-}
-
-.comparison-table thead th {
-    background: #202938;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.comparison-table thead th:first-child,
-.comparison-table thead th:last-child {
-    width: 35%;
-    color: #f2f5fa;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.comparison-table thead th:first-child {
-    text-align: left;
-}
-
-.comparison-table thead th:nth-child(2) {
-    width: 30%;
-    text-align: center;
-}
-
-.comparison-table thead th:last-child {
-    text-align: right;
-}
-
-.comparison-table tbody td {
-    font-size: 14px;
-    transition: background 0.15s ease;
-}
-
-.comparison-table tbody tr:last-child td {
-    border-bottom: 0;
-}
-
-.comparison-table tbody tr:hover td {
-    background: var(--panel-hover);
-}
-
-.comparison-table tbody td:first-child {
-    text-align: left;
-    font-weight: 700;
-}
-
-.comparison-table tbody td:nth-child(2) {
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.comparison-table tbody td:last-child {
-    text-align: right;
-    font-weight: 700;
 }
 
 /* ========================================
@@ -410,64 +505,86 @@ h2 {
 
 .tabs {
     display: flex;
-    gap: 24px;
+    gap: var(--space-6);
+
+    margin-bottom: var(--space-6);
     border-bottom: 1px solid var(--border);
-    margin-bottom: 24px;
 }
 
 .tab {
-    background: none;
-    color: var(--muted);
+    padding: var(--space-3) var(--space-1);
+    margin-bottom: -1px;
+
+    background: transparent;
     border: 0;
-    border-bottom: 3px solid transparent;
-    padding: 13px 4px;
-    font: inherit;
-    font-weight: bold;
-    cursor: pointer;
+    border-bottom: 2px solid transparent;
+
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 650;
 }
 
 .tab:hover {
-    color: white;
+    color: var(--text);
 }
 
-.tab[aria-selected=true] {
-    color: white;
-    border-color: var(--accent);
-}
-
-[hidden] {
-    display: none !important;
+.tab[aria-selected="true"] {
+    color: var(--text);
+    border-bottom-color: var(--accent);
 }
 
 /* ========================================
-   Statistics Cards
+   Statistics
 ======================================== */
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
 }
 
 .stat {
-    padding: 21px;
+    min-width: 0;
+    padding: var(--space-5);
+
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    transition:
+        border-color var(--transition-normal),
+        background-color var(--transition-normal);
+}
+
+.stat:hover {
+    background: var(--surface);
+    border-color: #405064;
 }
 
 .stat .label {
+    color: var(--text-secondary);
     font-size: 13px;
-    color: var(--muted);
+    font-weight: 500;
 }
 
 .stat .value {
-    font-size: 32px;
+    margin: var(--space-2) 0 var(--space-1);
+
+    color: var(--text);
+    font-size: clamp(26px, 2.5vw, 35px);
     font-weight: 800;
-    margin: 6px 0;
+    letter-spacing: -1px;
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+
+    overflow-wrap: anywhere;
 }
 
 .stat .hint {
-    font-size: 12px;
     color: var(--muted);
+    font-size: 12px;
 }
 
 /* ========================================
@@ -476,125 +593,323 @@ h2 {
 
 .details {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
 }
 
 .details .panel {
-    padding: 20px;
+    padding: var(--space-5);
 }
 
 .details h3 {
-    margin: 0 0 12px;
+    margin-bottom: var(--space-3);
 }
 
 .detail {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    padding: 9px 0;
-    border-bottom: 1px solid var(--border);
+
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .detail:last-child {
-    border: 0;
+    border-bottom: 0;
+}
+
+.detail .muted {
+    font-size: 13px;
+}
+
+.detail b {
+    font-size: 14px;
+    font-weight: 650;
+    text-align: right;
+    overflow-wrap: anywhere;
 }
 
 /* ========================================
-   Map Statistics Table
+   General Tables
 ======================================== */
 
 .tablewrap {
-    overflow: auto;
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
 }
 
 table {
-    border-collapse: collapse;
     width: 100%;
     min-width: 620px;
+    border-collapse: collapse;
 }
 
 th,
 td {
-    padding: 15px 17px;
+    padding: var(--space-4);
+
+    border-bottom: 1px solid var(--border-subtle);
+
     text-align: left;
-    border-bottom: 1px solid var(--border);
-}
-
-th {
-    background: #202938;
-    color: var(--muted);
     font-size: 13px;
+    vertical-align: middle;
 }
 
-td:first-child {
-    font-weight: bold;
+thead th {
+    background: var(--surface-raised);
+
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+tbody td,
+tbody th {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+
+tbody th {
+    font-weight: 650;
+}
+
+tbody tr {
+    transition: background-color var(--transition-fast);
+}
+
+tbody tr:hover {
+    background: var(--surface-hover);
+}
+
+tbody tr:last-child td,
+tbody tr:last-child th {
+    border-bottom: 0;
+}
+
+#maps .tablewrap {
+    margin-bottom: var(--space-6);
 }
 
 /* ========================================
-   Status and Error Messages
+   Player Comparison Table
+
+   The middle column uses TH elements,
+   not TD elements.
+
+   Columns:
+   Player One | Statistic | Player Two
 ======================================== */
 
-.status {
-    color: #ffbca9;
-    min-height: 25px;
+.comparison-table {
+    width: 100%;
+    min-width: 480px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/* Explicit column widths */
+
+.comparison-table tr > :first-child {
+    width: 35%;
+}
+
+.comparison-table tr > :nth-child(2) {
+    width: 30%;
+}
+
+.comparison-table tr > :last-child {
+    width: 35%;
+}
+
+/* Shared comparison cell styling */
+
+.comparison-table th,
+.comparison-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+/* Player name headings */
+
+.comparison-table thead th:first-child {
+    text-align: left;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.comparison-table thead th:last-child {
+    text-align: right;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Statistic column heading */
+
+.comparison-table thead th:nth-child(2) {
+    background: var(--comparison-label-bg);
+    color: var(--text-secondary);
+
+    text-align: center;
+
+    font-size: 13px;
+    font-weight: 650;
+}
+
+/* First player's statistics */
+
+.comparison-table tbody td:first-child {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Statistic labels — middle column */
+
+.comparison-table tbody th:nth-child(2) {
+    background: var(--comparison-label-bg);
+    color: var(--text-secondary);
+
+    text-align: center;
+
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.2px;
+    line-height: 1.5;
+}
+
+/* Second player's statistics */
+
+.comparison-table tbody td:last-child {
+    text-align: right;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Row hover effects */
+
+.comparison-table tbody tr:hover td {
+    background: var(--surface-hover);
+}
+
+.comparison-table tbody tr:hover th:nth-child(2) {
+    background: var(--comparison-label-hover);
+}
+
+/* Remove final row borders */
+
+.comparison-table tbody tr:last-child td,
+.comparison-table tbody tr:last-child th {
+    border-bottom: 0;
 }
 
 /* ========================================
-   Tablet and Smaller Desktop Screens
+   Tablet Layout
 ======================================== */
 
-@media (max-width: 1000px) {
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
+@media (max-width: 1100px) {
+    .app {
+        grid-template-columns: 190px minmax(0, 1fr);
     }
 
+    main {
+        padding: var(--space-6);
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 850px) {
     .app {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     aside {
-        padding: 15px 22px;
+        padding: var(--space-4) var(--space-6);
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+        font-size: 22px;
     }
 
     .nav {
         display: none;
     }
+
+    main {
+        max-width: 850px;
+    }
 }
 
 /* ========================================
-   Mobile Screens
+   Mobile Layout
 ======================================== */
 
 @media (max-width: 650px) {
     main {
-        padding: 20px 16px;
+        padding: var(--space-5) var(--space-4);
     }
 
-    .search,
+    aside {
+        padding: var(--space-4);
+    }
+
+    .header {
+        align-items: stretch;
+        gap: var(--space-4);
+    }
+
+    .header > div {
+        width: 100%;
+    }
+
+    .search {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
     .search input,
     .search button {
         width: 100%;
     }
 
-    .search {
-        flex-direction: column;
-    }
-
-    .details {
-        grid-template-columns: 1fr;
-    }
-
     .profile {
-        padding: 16px;
+        min-height: 0;
+        padding: var(--space-5);
+        gap: var(--space-4);
     }
 
     .profile img {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
+    }
+
+    .profile h2 {
+        font-size: 21px;
+    }
+
+    .tag {
+        margin-top: var(--space-2);
+    }
+
+    .elo {
+        margin-left: var(--space-2);
+        font-size: 12px;
     }
 
     #comparisonSearch {
-        padding: 18px;
+        padding: var(--space-5);
     }
 
     #comparisonForm {
@@ -604,7 +919,7 @@ td:first-child {
 
     #comparisonUsername {
         width: 100%;
-        min-width: 0;
+        flex: 0 0 auto;
     }
 
     .comparison-actions {
@@ -615,8 +930,25 @@ td:first-child {
         flex: 1;
     }
 
-    .comparison-header h2 {
-        font-size: 19px;
+    .cards {
+        gap: var(--space-3);
+    }
+
+    .stat {
+        padding: var(--space-4);
+    }
+
+    .stat .value {
+        font-size: 27px;
+    }
+
+    .details {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .tabs {
+        gap: var(--space-5);
     }
 
     .comparison-table {
@@ -625,6 +957,40 @@ td:first-child {
 
     .comparison-table th,
     .comparison-table td {
-        padding: 13px 12px;
+        padding: var(--space-3);
+    }
+}
+
+@media (max-width: 380px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .profile {
+        align-items: flex-start;
+    }
+
+    .comparison-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .comparison-actions button {
+        width: 100%;
+    }
+}
+
+/* ========================================
+   Reduced Motion Accessibility
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
     }
 }
