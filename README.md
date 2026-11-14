@@ -20,9 +20,10 @@ Collaborative project between JoeRenDev & Kaan-Dilmen.
 - AI-powered playstyle improvement suggestions.
 - AI-powered realtime match analysis.
 
-## Development Disclaimer
-- API Key not included within this repository.
-- For testing / demonstration before full deployment, an API key can be created through the 'FACEIT for Developers' portal.
+## Development Notes
+- main – The stable branch containing completed, tested and approved features. Changes are merged into main once development milestones have been completed.
+- development – The active development branch where new features, improvements and bug fixes are implemented and tested before being merged into main.
+- API Key not included within this repository, for testing / demonstration before full deployment, an API key can be created through the 'FACEIT for Developers' portal.
 
 ## Third-Party Services & Disclaimer
 
