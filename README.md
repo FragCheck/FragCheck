@@ -10,9 +10,9 @@ Collaborative project between JoeRenDev & Kaan-Dilmen.
 - Search users on FACEIT database.
 - View player statistics (K/D, win rate, average kills, etc).
 - Specific map performance statistics.
+- Player profile/performance comparison.
 
 ### Planned Features
-- Player profile/performance comparison.
 - Login functionality.
 - Player data exports.
 - Security hardening.
