@@ -42,7 +42,7 @@
             <div id="status" class="status" role="status"></div>
 
             <!-- Player Profile -->
-            <section class="profile panel">
+            <section class="profile panel" id="profile">
                 <img id="avatar" alt="Player avatar" hidden>
 
                 <div>
@@ -61,6 +61,7 @@
             <section id="comparisonSearch" class="panel" hidden>
             <h3>Compare with another player</h3>
 
+
             <form id="comparisonForm">
                 <input
                     id="comparisonUsername"
@@ -70,18 +71,83 @@
                     required
                 >
 
-                <button id="comparisonButton" type="submit">
-                    Compare Players
-                </button>
+                <div class="comparison-actions">
+                    <button id="comparisonButton" type="submit">
+                        Compare Players
+                    </button>
+
+                    <button id="removeComparison" type="button" hidden>
+                        Remove Comparison
+                    </button>
+                </div>
             </form>
+
 
             <div id="comparisonStatus" role="status"></div>
             </section>
 
+                        <!-- Player Comparison View -->
+            <section id="comparisonView" hidden>
+                <div class="comparison-header">
+                    <div>
+                        <h2>Player Comparison</h2>
+                    </div>
+                </div>
+
+                <div class="panel tablewrap">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th id="comparisonPlayerOne">Player A</th>
+                                <th>Statistic</th>
+                                <th id="comparisonPlayerTwo">Player B</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td id="compareEloOne">—</td>
+                                <td>FACEIT ELO</td>
+                                <td id="compareEloTwo">—</td>
+                            </tr>
+
+                            <tr>
+                                <td id="compareLevelOne">—</td>
+                                <td>Skill Level</td>
+                                <td id="compareLevelTwo">—</td>
+                            </tr>
+
+                            <tr>
+                                <td id="compareKdOne">—</td>
+                                <td>Average K/D</td>
+                                <td id="compareKdTwo">—</td>
+                            </tr>
+
+                            <tr>
+                                <td id="compareWinrateOne">—</td>
+                                <td>Win Rate</td>
+                                <td id="compareWinrateTwo">—</td>
+                            </tr>
+
+                            <tr>
+                                <td id="compareHeadshotsOne">—</td>
+                                <td>Headshot Percentage</td>
+                                <td id="compareHeadshotsTwo">—</td>
+                            </tr>
+
+                            <tr>
+                                <td id="compareMatchesOne">—</td>
+                                <td>Matches Played</td>
+                                <td id="compareMatchesTwo">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
 
             <!-- Dashboard Tabs -->
-            <div class="tabs" role="tablist" aria-label="Dashboard sections">
+            <div class="tabs" id="tabs" role="tablist" aria-label="Dashboard sections">
                 <button
                     class="tab"
                     id="overviewTab"
@@ -214,6 +280,72 @@
                     </table>
                 </div>
             </section>
+
+          
+
+<!-- Player Comparison View -->
+<section id="comparisonView" hidden>
+
+    <div class="comparison-header">
+        <div>
+            <h2>Player Comparison</h2>
+            <p class="muted">Comparing player performance</p>
+        </div>
+    </div>
+
+      <div class="panel tablewrap">
+          <table class="comparison-table">
+              <thead>
+                  <tr>
+                      <th id="comparisonPlayerOne">Player A</th>
+                      <th>Statistic</th>
+                      <th id="comparisonPlayerTwo">Player B</th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  <tr>
+                      <td id="compareEloOne">—</td>
+                      <td>FACEIT ELO</td>
+                      <td id="compareEloTwo">—</td>
+                  </tr>
+
+                  <tr>
+                      <td id="compareLevelOne">—</td>
+                      <td>Skill Level</td>
+                      <td id="compareLevelTwo">—</td>
+                  </tr>
+
+                  <tr>
+                      <td id="compareKdOne">—</td>
+                      <td>Average K/D</td>
+                      <td id="compareKdTwo">—</td>
+                  </tr>
+
+                  <tr>
+                      <td id="compareWinrateOne">—</td>
+                      <td>Win Rate</td>
+                      <td id="compareWinrateTwo">—</td>
+                  </tr>
+
+                  <tr>
+                      <td id="compareHeadshotsOne">—</td>
+                      <td>Headshot Percentage</td>
+                      <td id="compareHeadshotsTwo">—</td>
+                  </tr>
+
+                  <tr>
+                      <td id="compareMatchesOne">—</td>
+                      <td>Matches Played</td>
+                      <td id="compareMatchesTwo">—</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+  </section>
+
+
         </main>
     </div>
 

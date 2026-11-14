@@ -1,15 +1,23 @@
 
-/* Theme Variables */
+/* ========================================
+   Theme Variables
+======================================== */
+
 :root {
     color-scheme: dark;
     --bg: #0d1119;
     --panel: #171e2a;
+    --panel-hover: #1c2635;
     --border: #2c3748;
     --muted: #9ca9bb;
     --accent: #ff704e;
+    --accent-hover: #ff886b;
 }
 
-/* Global Styles */
+/* ========================================
+   Global Styles
+======================================== */
+
 * {
     box-sizing: border-box;
 }
@@ -21,7 +29,20 @@ body {
     font: 15px/1.5 'Segoe UI', Arial, sans-serif;
 }
 
-/* Main Layout */
+button,
+input {
+    font: inherit;
+}
+
+button {
+    transition: background 0.2s ease, border-color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+/* ========================================
+   Main Layout
+======================================== */
+
 .app {
     display: grid;
     grid-template-columns: 210px 1fr;
@@ -41,7 +62,10 @@ main {
     margin: auto;
 }
 
-/* Sidebar */
+/* ========================================
+   Sidebar
+======================================== */
+
 .brand {
     font-size: 24px;
     font-weight: 800;
@@ -59,7 +83,10 @@ main {
     padding: 12px;
 }
 
-/* Header */
+/* ========================================
+   Header
+======================================== */
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -82,7 +109,10 @@ h2 {
     color: var(--muted);
 }
 
-/* Player Search */
+/* ========================================
+   Player Search
+======================================== */
+
 .search {
     display: flex;
     gap: 8px;
@@ -98,6 +128,13 @@ h2 {
     font: inherit;
 }
 
+.search input:focus,
+.comparison-search input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 112, 78, 0.12);
+}
+
 .search button {
     background: var(--accent);
     color: #1b1614;
@@ -108,18 +145,29 @@ h2 {
     cursor: pointer;
 }
 
-.search button:disabled {
-    opacity: .5;
+.search button:hover {
+    background: var(--accent-hover);
 }
 
-/* Reusable Panels */
+.search button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   Reusable Panels
+======================================== */
+
 .panel {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 15px;
 }
 
-/* Player Profile */
+/* ========================================
+   Player Profile
+======================================== */
+
 .profile {
     display: flex;
     align-items: center;
@@ -156,7 +204,210 @@ h2 {
     font-weight: bold;
 }
 
-/* Dashboard Tabs */
+/* ========================================
+   Player Comparison Search
+======================================== */
+
+#comparisonSearch {
+    padding: 22px 24px;
+    margin-bottom: 25px;
+}
+
+#comparisonSearch h3 {
+    margin: 0 0 16px;
+    font-size: 16px;
+}
+
+#comparisonForm {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#comparisonUsername {
+    flex: 1;
+    min-width: 220px;
+    background: #101722;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 11px 14px;
+    color: white;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#comparisonUsername::placeholder {
+    color: #778499;
+}
+
+#comparisonUsername:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 112, 78, 0.12);
+}
+
+.comparison-actions {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#comparisonButton,
+#removeComparison {
+    padding: 11px 17px;
+    border-radius: 9px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#comparisonButton {
+    background: var(--accent);
+    color: #1b1614;
+    border: 1px solid var(--accent);
+}
+
+#comparisonButton:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+#removeComparison {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+#removeComparison:hover {
+    background: #29232b;
+    color: #ff9c87;
+    border-color: #70443f;
+}
+
+#comparisonButton:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+#comparisonStatus {
+    color: #ffbca9;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+/* ========================================
+   Player Comparison Display
+======================================== */
+
+#comparisonView {
+    margin-bottom: 28px;
+    animation: comparisonAppear 0.25s ease;
+}
+
+@keyframes comparisonAppear {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.comparison-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.comparison-header h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+/* ========================================
+   Comparison Table
+======================================== */
+
+.comparison-table {
+    width: 100%;
+    min-width: 480px;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.comparison-table thead th {
+    background: #202938;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.comparison-table thead th:first-child,
+.comparison-table thead th:last-child {
+    width: 35%;
+    color: #f2f5fa;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.comparison-table thead th:first-child {
+    text-align: left;
+}
+
+.comparison-table thead th:nth-child(2) {
+    width: 30%;
+    text-align: center;
+}
+
+.comparison-table thead th:last-child {
+    text-align: right;
+}
+
+.comparison-table tbody td {
+    font-size: 14px;
+    transition: background 0.15s ease;
+}
+
+.comparison-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.comparison-table tbody tr:hover td {
+    background: var(--panel-hover);
+}
+
+.comparison-table tbody td:first-child {
+    text-align: left;
+    font-weight: 700;
+}
+
+.comparison-table tbody td:nth-child(2) {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.comparison-table tbody td:last-child {
+    text-align: right;
+    font-weight: 700;
+}
+
+/* ========================================
+   Dashboard Tabs
+======================================== */
+
 .tabs {
     display: flex;
     gap: 24px;
@@ -175,16 +426,23 @@ h2 {
     cursor: pointer;
 }
 
+.tab:hover {
+    color: white;
+}
+
 .tab[aria-selected=true] {
     color: white;
     border-color: var(--accent);
 }
 
 [hidden] {
-    display: none!important;
+    display: none !important;
 }
 
-/* Statistics Cards */
+/* ========================================
+   Statistics Cards
+======================================== */
+
 .cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -212,7 +470,10 @@ h2 {
     color: var(--muted);
 }
 
-/* Account and Match Details */
+/* ========================================
+   Account and Match Details
+======================================== */
+
 .details {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -238,7 +499,10 @@ h2 {
     border: 0;
 }
 
-/* Map Statistics Table */
+/* ========================================
+   Map Statistics Table
+======================================== */
+
 .tablewrap {
     overflow: auto;
 }
@@ -266,13 +530,19 @@ td:first-child {
     font-weight: bold;
 }
 
-/* Status and Error Messages */
+/* ========================================
+   Status and Error Messages
+======================================== */
+
 .status {
     color: #ffbca9;
     min-height: 25px;
 }
 
-/* Tablet and Smaller Desktop Screens */
+/* ========================================
+   Tablet and Smaller Desktop Screens
+======================================== */
+
 @media (max-width: 1000px) {
     .cards {
         grid-template-columns: repeat(2, 1fr);
@@ -291,7 +561,10 @@ td:first-child {
     }
 }
 
-/* Mobile Screens */
+/* ========================================
+   Mobile Screens
+======================================== */
+
 @media (max-width: 650px) {
     main {
         padding: 20px 16px;
@@ -318,5 +591,40 @@ td:first-child {
     .profile img {
         width: 60px;
         height: 60px;
+    }
+
+    #comparisonSearch {
+        padding: 18px;
+    }
+
+    #comparisonForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #comparisonUsername {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .comparison-actions {
+        width: 100%;
+    }
+
+    .comparison-actions button {
+        flex: 1;
+    }
+
+    .comparison-header h2 {
+        font-size: 19px;
+    }
+
+    .comparison-table {
+        min-width: 480px;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 13px 12px;
     }
 }

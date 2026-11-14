@@ -110,6 +110,47 @@ function renderPlayer(data) {
     }
 }
 
+
+function renderComparison(playerOne, playerTwo) {
+    const profileOne = playerOne.profile;
+    const profileTwo = playerTwo.profile;
+
+    const gameOne = profileOne.games?.cs2 || {};
+    const gameTwo = profileTwo.games?.cs2 || {};
+
+    const statsOne = playerOne.stats.lifetime || {};
+    const statsTwo = playerTwo.stats.lifetime || {};
+
+    // Player names
+    setText('comparisonPlayerOne', profileOne.nickname);
+    setText('comparisonPlayerTwo', profileTwo.nickname);
+
+    // FACEIT ELO
+    setText('compareEloOne', gameOne.faceit_elo);
+    setText('compareEloTwo', gameTwo.faceit_elo);
+
+    // Skill level
+    setText('compareLevelOne', gameOne.skill_level);
+    setText('compareLevelTwo', gameTwo.skill_level);
+
+    // Average K/D
+    setText('compareKdOne', statsOne['Average K/D Ratio']);
+    setText('compareKdTwo', statsTwo['Average K/D Ratio']);
+
+    // Win rate
+    setText('compareWinrateOne', statsOne['Win Rate %'], '%');
+    setText('compareWinrateTwo', statsTwo['Win Rate %'], '%');
+
+    // Headshot percentage
+    setText('compareHeadshotsOne', statsOne['Average Headshots %'], '%');
+    setText('compareHeadshotsTwo', statsTwo['Average Headshots %'], '%');
+
+    // Matches played
+    setText('compareMatchesOne', statsOne['Matches']);
+    setText('compareMatchesTwo', statsTwo['Matches']);
+}
+
+
 el('searchForm').addEventListener('submit', async event => {
     event.preventDefault();
 
@@ -222,8 +263,11 @@ el('searchForm').addEventListener('submit', async event => {
             }
 
             comparisonPlayer = data;
-            status.textContent = `Comparison player loaded: ${data.profile.nickname}`;
+            status.textContent = '';
+            renderComparison(primaryPlayer, comparisonPlayer);
 
+            el('comparisonView').hidden = false;
+            el('removeComparison').hidden = false;
         } catch (error) {
             status.textContent = `Unable to compare players: ${error.message}`;
 
@@ -231,6 +275,15 @@ el('searchForm').addEventListener('submit', async event => {
             button.disabled = false;
             button.textContent = 'Compare Players';
         }
+    });
+
+    el('removeComparison').addEventListener('click', () => {
+        comparisonPlayer = null;
+
+        el('comparisonView').hidden = true;
+        el('comparisonUsername').value = '';
+        el('comparisonStatus').textContent = '';
+        el('removeComparison').hidden = true;
     });
 
 });
