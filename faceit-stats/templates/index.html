@@ -57,6 +57,29 @@
                 </div>
             </section>
 
+            <!-- Player Comparison -->
+            <section id="comparisonSearch" class="panel" hidden>
+            <h3>Compare with another player</h3>
+
+            <form id="comparisonForm">
+                <input
+                    id="comparisonUsername"
+                    type="text"
+                    placeholder="Enter another FACEIT username"
+                    aria-label="Username to compare"
+                    required
+                >
+
+                <button id="comparisonButton" type="submit">
+                    Compare Players
+                </button>
+            </form>
+
+            <div id="comparisonStatus" role="status"></div>
+            </section>
+
+
+
             <!-- Dashboard Tabs -->
             <div class="tabs" role="tablist" aria-label="Dashboard sections">
                 <button

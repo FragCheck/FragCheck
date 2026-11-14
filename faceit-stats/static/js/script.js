@@ -1,6 +1,9 @@
 
 const el = id => document.getElementById(id);
 
+let primaryPlayer = null;
+let comparisonPlayer = null;
+
 function setText(id, value, suffix = '') {
     el(id).textContent = value === undefined || value === null || value === ''
         ? '—'
@@ -153,7 +156,11 @@ el('searchForm').addEventListener('submit', async event => {
             );
         }
 
-        renderPlayer(data);
+        primaryPlayer = data;
+        comparisonPlayer = null;
+
+        renderPlayer(primaryPlayer);
+        el('comparisonSearch').hidden = false;
 
     } catch (error) {
         el('status').textContent = `Unable to load player: ${error.message}`;
@@ -162,4 +169,69 @@ el('searchForm').addEventListener('submit', async event => {
         button.disabled = false;
         button.textContent = 'Search Player';
     }
+    el('comparisonForm').addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const username = el('comparisonUsername').value.trim();
+        const status = el('comparisonStatus');
+        const button = el('comparisonButton');
+
+        if (!primaryPlayer || !username) {
+            status.textContent = 'Search for a primary player first.';
+            return;
+        }
+
+        if (username.toLowerCase() === primaryPlayer.profile.nickname.toLowerCase()) {
+            status.textContent = 'You cannot compare a player against themselves.';
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = 'Searching...';
+        status.textContent = '';
+
+        try {
+            const response = await fetch('/search-player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username })
+            });
+
+            const data = await response.json();
+
+            if (response.status === 404) {
+                throw new Error('Comparison player not found.');
+            }
+
+            if (
+                !response.ok ||
+                data.error ||
+                data.profile?.error ||
+                data.stats?.error ||
+                !data.profile ||
+                !data.stats
+            ) {
+                throw new Error(
+                    data.error ||
+                    data.profile?.error ||
+                    data.stats?.error ||
+                    'Comparison player data unavailable.'
+                );
+            }
+
+            comparisonPlayer = data;
+            status.textContent = `Comparison player loaded: ${data.profile.nickname}`;
+
+        } catch (error) {
+            status.textContent = `Unable to compare players: ${error.message}`;
+
+        } finally {
+            button.disabled = false;
+            button.textContent = 'Compare Players';
+        }
+    });
+
 });
+
