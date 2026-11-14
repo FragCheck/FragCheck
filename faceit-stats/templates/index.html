@@ -1,143 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FragCheck Dashboard</title>
+    <meta name="theme-color" content="#0d1119">
+    <meta name="description" content="Explore FACEIT CS2 player statistics, map performance, and player comparisons with FragCheck.">
+    <title>FragCheck | FACEIT CS2 Player Statistics</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 </head>
-
 <body>
     <div class="app">
-        <aside>
-            <div class="brand">
-                FRAG<span>CHECK</span>
-            </div>
-
-            <div class="nav">Player Dashboard</div>
+        <aside aria-label="Application sidebar">
+            <div class="brand">FRAG<span>CHECK</span></div>
+            <div class="nav" aria-current="page">Player Dashboard</div>
         </aside>
 
-        <main>
+        <main id="main-content">
             <header class="header">
                 <div>
                     <h1>Player Dashboard</h1>
-                    <div class="muted">FACEIT CS2 statistics</div>
+                    <p class="muted">FACEIT CS2 statistics</p>
                 </div>
 
-                <form class="search" id="searchForm">
+                <form class="search" id="searchForm" role="search">
                     <input
                         id="username"
+                        name="username"
+                        type="text"
                         placeholder="FACEIT username"
                         aria-label="FACEIT username"
+                        autocomplete="off"
                         required
                     >
-                    <button id="searchButton" type="submit">
-                        Search Player
-                    </button>
+                    <button id="searchButton" type="submit">Search Player</button>
                 </form>
             </header>
 
-            <div id="status" class="status" role="status"></div>
+            <div id="status" class="status" role="status" aria-live="polite"></div>
 
-            <!-- Player Profile -->
-            <section class="profile panel" id="profile">
-                <img id="avatar" alt="Player avatar" hidden>
-
+            <!-- Player profile and initial search state -->
+            <section class="profile panel" id="profile" aria-label="Player profile">
+                <img id="avatar" alt="FACEIT player avatar" hidden>
                 <div>
                     <h2 id="nickname">Search for a player</h2>
-
-                    <div class="muted" id="countryRegion">
-                        Enter a FACEIT username above.
-                    </div>
-
+                    <div class="muted" id="countryRegion">Enter a FACEIT username above.</div>
                     <span class="tag" id="level">FACEIT Level —</span>
                     <span class="elo" id="elo">— ELO</span>
                 </div>
             </section>
 
-            <!-- Player Comparison -->
-            <section id="comparisonSearch" class="panel" hidden>
-            <h3>Compare with another player</h3>
-
-
-            <form id="comparisonForm">
-                <input
-                    id="comparisonUsername"
-                    type="text"
-                    placeholder="Enter another FACEIT username"
-                    aria-label="Username to compare"
-                    required
-                >
-
-                <div class="comparison-actions">
-                    <button id="comparisonButton" type="submit">
-                        Compare Players
-                    </button>
-
-                    <button id="removeComparison" type="button" hidden>
-                        Remove Comparison
-                    </button>
-                </div>
-            </form>
-
-
-            <div id="comparisonStatus" role="status"></div>
+            <!-- Player comparison controls -->
+            <section id="comparisonSearch" class="panel" aria-labelledby="comparisonSearchHeading" hidden>
+                <h3 id="comparisonSearchHeading">Compare with another player</h3>
+                <form id="comparisonForm" role="search">
+                    <input
+                        id="comparisonUsername"
+                        name="comparisonUsername"
+                        type="text"
+                        placeholder="Enter another FACEIT username"
+                        aria-label="FACEIT username to compare"
+                        autocomplete="off"
+                        required
+                    >
+                    <div class="comparison-actions">
+                        <button id="comparisonButton" type="submit">Compare Players</button>
+                        <button id="removeComparison" type="button" hidden>Remove Comparison</button>
+                    </div>
+                </form>
+                <div id="comparisonStatus" role="status" aria-live="polite"></div>
             </section>
 
-                        <!-- Player Comparison View -->
-            <section id="comparisonView" hidden>
+            <!-- Comparison results: keep IDs for existing JavaScript -->
+            <section id="comparisonView" aria-labelledby="comparisonHeading" hidden>
                 <div class="comparison-header">
-                    <div>
-                        <h2>Player Comparison</h2>
-                    </div>
+                    <h2 id="comparisonHeading">Player Comparison</h2>
                 </div>
-
                 <div class="panel tablewrap">
                     <table class="comparison-table">
                         <thead>
                             <tr>
-                                <th id="comparisonPlayerOne">Player A</th>
-                                <th>Statistic</th>
-                                <th id="comparisonPlayerTwo">Player B</th>
+                                <th id="comparisonPlayerOne" scope="col">Player A</th>
+                                <th scope="col">Statistic</th>
+                                <th id="comparisonPlayerTwo" scope="col">Player B</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             <tr>
                                 <td id="compareEloOne">—</td>
-                                <td>FACEIT ELO</td>
+                                <th scope="row">FACEIT ELO</th>
                                 <td id="compareEloTwo">—</td>
                             </tr>
-
                             <tr>
                                 <td id="compareLevelOne">—</td>
-                                <td>Skill Level</td>
+                                <th scope="row">Skill Level</th>
                                 <td id="compareLevelTwo">—</td>
                             </tr>
-
                             <tr>
                                 <td id="compareKdOne">—</td>
-                                <td>Average K/D</td>
+                                <th scope="row">Average K/D</th>
                                 <td id="compareKdTwo">—</td>
                             </tr>
-
                             <tr>
                                 <td id="compareWinrateOne">—</td>
-                                <td>Win Rate</td>
+                                <th scope="row">Win Rate</th>
                                 <td id="compareWinrateTwo">—</td>
                             </tr>
-
                             <tr>
                                 <td id="compareHeadshotsOne">—</td>
-                                <td>Headshot Percentage</td>
+                                <th scope="row">Headshot Percentage</th>
                                 <td id="compareHeadshotsTwo">—</td>
                             </tr>
-
                             <tr>
                                 <td id="compareMatchesOne">—</td>
-                                <td>Matches Played</td>
+                                <th scope="row">Matches Played</th>
                                 <td id="compareMatchesTwo">—</td>
                             </tr>
                         </tbody>
@@ -145,8 +121,7 @@
                 </div>
             </section>
 
-
-            <!-- Dashboard Tabs -->
+            <!-- Dashboard navigation -->
             <div class="tabs" id="tabs" role="tablist" aria-label="Dashboard sections">
                 <button
                     class="tab"
@@ -155,10 +130,7 @@
                     aria-selected="true"
                     aria-controls="overview"
                     type="button"
-                >
-                    Overview
-                </button>
-
+                >Overview</button>
                 <button
                     class="tab"
                     id="mapsTab"
@@ -166,38 +138,28 @@
                     aria-selected="false"
                     aria-controls="maps"
                     type="button"
-                >
-                    Maps
-                </button>
+                    tabindex="-1"
+                >Maps</button>
             </div>
 
-            <!-- Overview Tab -->
-            <section
-                id="overview"
-                role="tabpanel"
-                aria-labelledby="overviewTab"
-            >
+            <section id="overview" role="tabpanel" aria-labelledby="overviewTab" tabindex="0">
                 <h2>Lifetime performance</h2>
-
                 <div class="cards">
                     <article class="stat panel">
                         <div class="label">Average K/D</div>
                         <div class="value" id="kd">—</div>
                         <div class="hint">Kills / deaths</div>
                     </article>
-
                     <article class="stat panel">
                         <div class="label">Win rate</div>
                         <div class="value" id="winrate">—</div>
                         <div class="hint" id="winHint">Wins / matches</div>
                     </article>
-
                     <article class="stat panel">
                         <div class="label">Average headshots</div>
                         <div class="value" id="headshots">—</div>
                         <div class="hint">Headshot percentage</div>
                     </article>
-
                     <article class="stat panel">
                         <div class="label">Matches</div>
                         <div class="value" id="matches">—</div>
@@ -206,150 +168,44 @@
                 </div>
 
                 <div class="details">
-                    <!-- Account Details -->
-                    <div class="panel">
-                        <h3>Account</h3>
-
-                        <div class="detail">
-                            <span class="muted">Region</span>
-                            <b id="region">—</b>
-                        </div>
-
-                        <div class="detail">
-                            <span class="muted">Skill level</span>
-                            <b id="skill">—</b>
-                        </div>
-
-                        <div class="detail">
-                            <span class="muted">Country</span>
-                            <b id="country">—</b>
-                        </div>
-                    </div>
-
-                    <!-- Match Record -->
-                    <div class="panel">
-                        <h3>Match record</h3>
-
-                        <div class="detail">
-                            <span class="muted">Wins</span>
-                            <b id="wins">—</b>
-                        </div>
-
-                        <div class="detail">
-                            <span class="muted">Current win streak</span>
-                            <b id="streak">—</b>
-                        </div>
-
-                        <div class="detail">
-                            <span class="muted">Longest win streak</span>
-                            <b id="longest">—</b>
-                        </div>
-                    </div>
+                    <section class="panel" aria-labelledby="accountHeading">
+                        <h3 id="accountHeading">Account</h3>
+                        <div class="detail"><span class="muted">Region</span><b id="region">—</b></div>
+                        <div class="detail"><span class="muted">Skill level</span><b id="skill">—</b></div>
+                        <div class="detail"><span class="muted">Country</span><b id="country">—</b></div>
+                    </section>
+                    <section class="panel" aria-labelledby="matchHeading">
+                        <h3 id="matchHeading">Match record</h3>
+                        <div class="detail"><span class="muted">Wins</span><b id="wins">—</b></div>
+                        <div class="detail"><span class="muted">Current win streak</span><b id="streak">—</b></div>
+                        <div class="detail"><span class="muted">Longest win streak</span><b id="longest">—</b></div>
+                    </section>
                 </div>
             </section>
 
-            <!-- Maps Tab -->
-            <section
-                id="maps"
-                role="tabpanel"
-                aria-labelledby="mapsTab"
-                hidden
-            >
+            <section id="maps" role="tabpanel" aria-labelledby="mapsTab" tabindex="0" hidden>
                 <h2>Map performance</h2>
-
                 <div class="panel tablewrap">
                     <table>
                         <thead>
                             <tr>
-                                <th>Map</th>
-                                <th>Matches</th>
-                                <th>Average K/D</th>
-                                <th>Win rate</th>
-                                <th>Average kills</th>
-                                <th>Average headshots</th>
+                                <th scope="col">Map</th>
+                                <th scope="col">Matches</th>
+                                <th scope="col">Average K/D</th>
+                                <th scope="col">Win rate</th>
+                                <th scope="col">Average kills</th>
+                                <th scope="col">Average headshots</th>
                             </tr>
                         </thead>
-
                         <tbody id="mapRows">
                             <tr>
-                                <td colspan="6">
-                                    Search for a player to view map statistics.
-                                </td>
+                                <td colspan="6">Search for a player to view map statistics.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
-
-          
-
-<!-- Player Comparison View -->
-<section id="comparisonView" hidden>
-
-    <div class="comparison-header">
-        <div>
-            <h2>Player Comparison</h2>
-            <p class="muted">Comparing player performance</p>
-        </div>
-    </div>
-
-      <div class="panel tablewrap">
-          <table class="comparison-table">
-              <thead>
-                  <tr>
-                      <th id="comparisonPlayerOne">Player A</th>
-                      <th>Statistic</th>
-                      <th id="comparisonPlayerTwo">Player B</th>
-                  </tr>
-              </thead>
-
-              <tbody>
-                  <tr>
-                      <td id="compareEloOne">—</td>
-                      <td>FACEIT ELO</td>
-                      <td id="compareEloTwo">—</td>
-                  </tr>
-
-                  <tr>
-                      <td id="compareLevelOne">—</td>
-                      <td>Skill Level</td>
-                      <td id="compareLevelTwo">—</td>
-                  </tr>
-
-                  <tr>
-                      <td id="compareKdOne">—</td>
-                      <td>Average K/D</td>
-                      <td id="compareKdTwo">—</td>
-                  </tr>
-
-                  <tr>
-                      <td id="compareWinrateOne">—</td>
-                      <td>Win Rate</td>
-                      <td id="compareWinrateTwo">—</td>
-                  </tr>
-
-                  <tr>
-                      <td id="compareHeadshotsOne">—</td>
-                      <td>Headshot Percentage</td>
-                      <td id="compareHeadshotsTwo">—</td>
-                  </tr>
-
-                  <tr>
-                      <td id="compareMatchesOne">—</td>
-                      <td>Matches Played</td>
-                      <td id="compareMatchesTwo">—</td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
-
-  </section>
-
-
         </main>
     </div>
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
-
 </html>
